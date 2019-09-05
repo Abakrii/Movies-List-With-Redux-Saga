@@ -8,6 +8,7 @@ import {
   Platform,
   TextInput,
   FlatList,
+  ScrollView
 } from 'react-native';
 import styles from './Style';
 class MovieComponent extends React.Component {
@@ -31,8 +32,9 @@ class MovieComponent extends React.Component {
       fetchAndAddMovie,
       flatLitText,
     } = styles;
+    console.log("props" , this.props)
     return (
-      <View style={container}>
+      <ScrollView style={container}>
         <Text style={moviesListText}>Redux Saga Movies List</Text>
         <Text style={newMoviesInformationText}>New Movies Information</Text>
         <View style={secoundContainer}>
@@ -53,7 +55,9 @@ class MovieComponent extends React.Component {
           <Button
             style={fetchAndAddMovie}
             title="Fetch Movie"
-            onPress={() => {}}
+            onPress={() => {
+              this.props.onFetchMovies('asc');
+            }}
           />
           <View style={{paddingHorizontal: 10}}/>
           <Button style={fetchAndAddMovie}  title="Add Movie" onPress={() => {}} />
@@ -61,19 +65,21 @@ class MovieComponent extends React.Component {
         <FlatList
           data={this.props.movies}
           keyExtractor={item => item.name}
-          renderItem={({item, index}) => (
+          renderItem={({item, index}) => 
             <Text
-              style={[
-                flatLitText,
-                {
+              style={{
+                  padding: 10,
+                  fontWeight: 'bold',
+                  fontSize: 17,
+                  color: 'white',
                   backgroundColor:
                     index % 2 === 0 ? 'dodgerblue' : 'mediumseagreen',
-                },
-              ]}>{`${item.name}, releaseYear= ${item.releaseYear}`}</Text>
-          )}
+                }}>
+                {`${item.name}, releaseYear= ${item.releaseYear}`}
+                </Text>
+          }
         />
-      </View>
-    );
+      </ScrollView> );
   }
 }
 
