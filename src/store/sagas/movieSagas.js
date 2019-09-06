@@ -2,6 +2,7 @@ import {
   FETCH_MOVIES,
   FETCH_SUCCEEDED,
   FETCH_FAILED,
+  ADD_MOVIE,
 } from '../actions/actionTypes';
 
 //saga effects
@@ -24,4 +25,22 @@ function* fetchMovies() {
 
 export function* watchFetchMovies() {
   yield takeLatest(FETCH_MOVIES, fetchMovies);
+}
+
+function* postNewMovie(action) {
+    console.log('action', action )
+  try {
+    const result = yield Api.postMoviesToApi(action.newMovie);
+    console.log('the result', result);
+    if (result === true) {
+      yield put({type: FETCH_MOVIES, sort: 'desc'});
+    }
+  } catch (error) {
+    console.log('error', error);
+  }
+}
+
+
+export function* watchPostMovies(){
+    yield takeLatest(ADD_MOVIE, postNewMovie);
 }

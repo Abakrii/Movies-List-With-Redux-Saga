@@ -1,6 +1,8 @@
-//json-server --host 192.168.8.100 db.json
-// json-server --host 10.168.20.146 db.json
-const getMoviesUrl = 'http://10.168.20.146:3000/movies';
+//json-server --host 192.168.8.100 db.json // my wifi
+// json-server --host 10.168.20.146 db.json // mu uni
+//json-server --host 192.168.8.102 db.json // hakawati
+const getMoviesUrl = 'http://192.168.8.102:3000/movies';
+const postMovieUrl = 'http://192.168.8.102:3000/movies';
 
 import axios from 'axios';
 
@@ -17,6 +19,23 @@ function* getMoviesFromApi() {
   return movies;
 }
 
+
+
+function* postMoviesToApi(newMovie){
+  console.log('GGG' , newMovie);
+  const request = yield axios.post(postMovieUrl,{
+    name: newMovie.name,
+    releaseYear: newMovie.releaseYear
+  })
+  console.log('request' , request)
+  console.log('new Moiveee' , newMovie)
+  const newMovies = yield request.data;
+  return newMovies;
+}
+
+
+
 export const Api = {
   getMoviesFromApi,
+  postMoviesToApi
 };

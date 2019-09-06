@@ -8,7 +8,7 @@ import {
   Platform,
   TextInput,
   FlatList,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import styles from './Style';
 class MovieComponent extends React.Component {
@@ -19,6 +19,24 @@ class MovieComponent extends React.Component {
       releaseYear: '',
     };
   }
+
+ 
+
+  _keyExtractor = (item, index) => item.id.toString();
+
+  _renderItem = ({item, index}) => (
+    <Text
+      id={item.id}
+      style={{
+        padding: 10,
+        fontWeight: 'bold',
+        fontSize: 17,
+        color: 'white',
+        backgroundColor: index % 2 === 0 ? 'dodgerblue' : 'mediumseagreen',
+      }}>
+      {`${item.name}, releaseYear= ${item.releaseYear}`}
+    </Text>
+  );
 
   render() {
     const {
@@ -32,7 +50,10 @@ class MovieComponent extends React.Component {
       fetchAndAddMovie,
       flatLitText,
     } = styles;
-    console.log("props" , this.props)
+
+    const {movieName, releaseYear} = this.state;
+    console.log('this state', this.state);
+    console.log('props', this.props);
     return (
       <ScrollView style={container}>
         <Text style={moviesListText}>Redux Saga Movies List</Text>
@@ -40,13 +61,13 @@ class MovieComponent extends React.Component {
         <View style={secoundContainer}>
           <TextInput
             style={firstTextInput}
-            onChange={text => this.setState({movieName: text})}
+            onChangeText={(text) => this.setState({movieName :text})}
             value={this.state.movieName}
             placeholder="Enter New Movie Name"
           />
           <TextInput
             style={secoundTextInput}
-            onChange={text => this.setState({releaseYear: text})}
+            onChangeText={(text) => this.setState({releaseYear :text})}
             value={this.state.releaseYear}
             placeholder="Release Year"
           />
@@ -59,27 +80,32 @@ class MovieComponent extends React.Component {
               this.props.onFetchMovies('asc');
             }}
           />
-          <View style={{paddingHorizontal: 10}}/>
-          <Button style={fetchAndAddMovie}  title="Add Movie" onPress={() => {}} />
+          <View style={{paddingHorizontal: 10}} />
+          <Button
+            style={fetchAndAddMovie}
+            title="Add Movie"
+            onPress={() => {
+              if (!movieName.length || !releaseYear.length) {
+                alert(
+                  'you must enter a move name and the release year together',
+                );
+                return;
+              }
+
+              this.props.onAddMovie({
+                name: movieName,
+                releaseYear: releaseYear,
+              });
+            }}
+          />
         </View>
         <FlatList
           data={this.props.movies}
-          keyExtractor={item => item.name}
-          renderItem={({item, index}) => 
-            <Text
-              style={{
-                  padding: 10,
-                  fontWeight: 'bold',
-                  fontSize: 17,
-                  color: 'white',
-                  backgroundColor:
-                    index % 2 === 0 ? 'dodgerblue' : 'mediumseagreen',
-                }}>
-                {`${item.name}, releaseYear= ${item.releaseYear}`}
-                </Text>
-          }
+          keyExtractor={this._keyExtractor}
+          renderItem={this._renderItem}
         />
-      </ScrollView> );
+      </ScrollView>
+    );
   }
 }
 

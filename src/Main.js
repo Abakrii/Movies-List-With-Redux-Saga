@@ -25,8 +25,8 @@ const mapDispatchToProps = dispatch => {
     onFetchMovies: () => {
       dispatch(fetchMoviesAction());
     },
-    onAddMovie: () => {
-      dispatch(addMovieAction());
+    onAddMovie: (newMovie) => {
+      dispatch(addMovieAction(newMovie));
     },
   };
 };
