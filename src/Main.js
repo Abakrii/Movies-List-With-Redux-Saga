@@ -13,6 +13,10 @@ import {
   addMovieAction,
   fetchSuccessAction,
   fetchFailedAction,
+  updateItemAction,
+  updateItemSuccessAction,
+  deleteItemAction,
+  deleteItemSuccessAction
 } from './store/actions';
 
 const mapStateToProps = state => {
@@ -28,6 +32,15 @@ const mapDispatchToProps = dispatch => {
     onAddMovie: (newMovie) => {
       dispatch(addMovieAction(newMovie));
     },
+    onUpdateItemAction: (updateMovie) => {
+      dispatch(updateItemAction(updateMovie))
+    },
+    // onUpdateItemSuccessAction: (updateMovie) => {
+    //   dispatch(updateItemSuccessAction(updateMovie))
+    // }
+    onDeleteItemAction: (deletedMoiveId) =>{
+      dispatch(deleteItemAction(deletedMoiveId));
+    }
   };
 };
 

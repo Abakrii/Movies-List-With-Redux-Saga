@@ -11,6 +11,8 @@ import {
   ScrollView,
 } from 'react-native';
 import styles from './Style';
+import FlatListItem from './FlatListItem';
+import EditModal from './EditModal';
 class MovieComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -20,23 +22,21 @@ class MovieComponent extends React.Component {
     };
   }
 
- 
-
   _keyExtractor = (item, index) => item.id.toString();
 
-  _renderItem = ({item, index}) => (
-    <Text
-      id={item.id}
-      style={{
-        padding: 10,
-        fontWeight: 'bold',
-        fontSize: 17,
-        color: 'white',
-        backgroundColor: index % 2 === 0 ? 'dodgerblue' : 'mediumseagreen',
-      }}>
-      {`${item.name}, releaseYear= ${item.releaseYear}`}
-    </Text>
-  );
+  // _renderItem = ({item, index}) => (
+  //   <Text
+  //     id={item.id}
+  //     style={{
+  //       padding: 10,
+  //       fontWeight: 'bold',
+  //       fontSize: 17,
+  //       color: 'white',
+  //       backgroundColor: index % 2 === 0 ? 'dodgerblue' : 'mediumseagreen',
+  //     }}>
+  //     {`${item.name}, releaseYear= ${item.releaseYear}`}
+  //   </Text>
+  // );
 
   render() {
     const {
@@ -61,13 +61,13 @@ class MovieComponent extends React.Component {
         <View style={secoundContainer}>
           <TextInput
             style={firstTextInput}
-            onChangeText={(text) => this.setState({movieName :text})}
+            onChangeText={text => this.setState({movieName: text})}
             value={this.state.movieName}
             placeholder="Enter New Movie Name"
           />
           <TextInput
             style={secoundTextInput}
-            onChangeText={(text) => this.setState({releaseYear :text})}
+            onChangeText={text => this.setState({releaseYear: text})}
             value={this.state.releaseYear}
             placeholder="Release Year"
           />
@@ -102,8 +102,9 @@ class MovieComponent extends React.Component {
         <FlatList
           data={this.props.movies}
           keyExtractor={this._keyExtractor}
-          renderItem={this._renderItem}
+          renderItem={({item, index})=> <FlatListItem {...item} itemIndex={index} movieComponent={this} />}
         />
+        <EditModal ref={"editModal"} movieComponent={this} />
       </ScrollView>
     );
   }
